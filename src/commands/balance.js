@@ -13,8 +13,8 @@ var con = net.connect(3000);
 con.pipe(db.createRpcStream()).pipe(con);
 
 const rpc = new Zcash({
-        username: "kotosan",
-        password: "tekitou",
+        username: "rpcuser",
+        password: "pass",
   port: "8432"
 });
 
