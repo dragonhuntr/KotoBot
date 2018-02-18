@@ -1,0 +1,32 @@
+{
+  "name": "dogecoin-tipping-bot",
+  "version": "0.0.1",
+  "description": "Dogecoin tipping bot",
+  "main": "src/main.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/main.js",
+    "dev": "nodemon src/main.js",
+    "migrate": "node migrate/index.js",
+    "test": "echo \"I will write some... One day...\" && exit 0"
+  },
+  "keywords": [
+    "dogecoin",
+    "discord",
+    "tipping"
+  ],
+  "author": "Me",
+  "license": "ISC",
+  "dependencies": {
+    "bitcoinjs-lib": "2.3.0",
+    "bitcoinjs-lib-zcash": "^3.3.2",
+    "discord.js": "^11.2.1",
+    "dotenv": "^4.0.0",
+    "multilevel": "^7.2.3",
+    "request": "^2.83.0",
+    "zcash": "^0.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}

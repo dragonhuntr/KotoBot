@@ -1,0 +1,16 @@
+{
+  "discord": {
+    "id": "discordid",
+    "secret": "discordsecret",
+    "token": "discordtoken"
+  },
+  "rpc": {
+    "host": “rpcip“,
+    "port": 8432,
+    "user": “rpcusername”,
+    "password": “rpcpassword”
+  },
+  "giphy": {
+    "key": ""
+  }
+}
