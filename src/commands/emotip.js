@@ -68,6 +68,8 @@ var a = function a(reaction) {
   console.log('asd')
   var amountInt = '0.1'
 
+  var qaccount = '@' + reaction.users.last().username + '#' reaction.users.last().discriminator
+
   var amountInt = parseFloat(amountInt).toFixed(8);
   console.log(amountInt)
   console.log(toAccount)
@@ -84,7 +86,7 @@ var a = function a(reaction) {
   db.get(toAccount, function(err, address) {
     var haddress = addr + address
     if (haddress  == '' + 'undefined') {
-      reaction.message.channel.send(message.author.toString() + ', User specified not found.')
+      reaction.message.channel.send(reaction.message.author.toString() + ', User specified not found.')
       return;
     }
     console.log(haddress)
@@ -103,18 +105,18 @@ var a = function a(reaction) {
                 } else {
                     console.log(data)
                     console.log('Sent', amountInt, 'to', haddress);
-                    reaction.message.channel.send(reaction.message.author.toString() + 'Sent **' +  amountInt + '** Koto to ``' +  haddress + '``')
+                    reaction.message.channel.send(qaccount + ', Sent **' +  amountInt + '** Koto to ``' +  haddress + '``')
                     reaction.message.channel.send('Your balance should update once the transaction gets confirmed.')
                 }
             });
         } else {
             console.log('Balance', data.result, 'is below threshold');
-            reaction.message.channel.send(reaction.message.author.toString() + 'Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
+            reaction.message.channel.send(qaccount + ', Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
               }
             }
         else {
            console.log ('Not enough balance')
-           reaction.message.channel.send(reaction.message.author.toString() + ', You do not have enough balance/ Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
+           reaction.message.channel.send(qaccount + ', You do not have enough balance/ Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
               }
             });
           })
@@ -127,11 +129,12 @@ var b = function b(reaction) {
   console.log('asd')
   var amountInt = '1'
 
+  var qaccount = '@' + reaction.users.last().username + '#' reaction.users.last().discriminator
+
   var amountInt = parseFloat(amountInt).toFixed(8);
   console.log(amountInt)
   console.log(toAccount)
   console.log(account)
-
   db.get(account, function(err, address) {
     var gaddress = addr + address
     console.log(gaddress)
@@ -142,8 +145,8 @@ var b = function b(reaction) {
         }
   db.get(toAccount, function(err, address) {
     var haddress = addr + address
-    if (haddress  == '' + 'undefined') {
-      reaction.message.channel.send(message.author.toString() + ', User specified not found.')
+    if (haddress == '' + 'undefined') {
+      reaction.message.channel.send(qaccount + ', User specified not found.')
       return;
     }
     console.log(haddress)
@@ -162,22 +165,201 @@ var b = function b(reaction) {
                 } else {
                     console.log(data)
                     console.log('Sent', amountInt, 'to', haddress);
-                    reaction.message.channel.send(reaction.message.author.toString() + 'Sent **' +  amountInt + '** Koto to ``' +  haddress + '``')
+                    reaction.message.channel.send(qaccount + ', Sent **' + amountInt + '** Koto to ``' + haddress + '``')
                     reaction.message.channel.send('Your balance should update once the transaction gets confirmed.')
                 }
             });
         } else {
             console.log('Balance', data.result, 'is below threshold');
-            reaction.message.channel.send(reaction.message.author.toString() + 'Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
+            reaction.message.channel.send(qaccount + 'Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
               }
             }
         else {
            console.log ('Not enough balance')
-           reaction.message.channel.send(reaction.message.author.toString() + ', You do not have enough balance/ Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
+           reaction.message.channel.send(qaccount + ', You do not have enough balance/ Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
               }
             });
           })
         })
       }
-
 module.exports.b = b
+
+
+var c = function c(reaction) {
+  console.log('asd')
+  var amountInt = '5'
+
+  var qaccount = '@' + reaction.users.last().username + '#' reaction.users.last().discriminator
+
+  var amountInt = parseFloat(amountInt).toFixed(8);
+  console.log(amountInt)
+  console.log(toAccount)
+  console.log(account)
+  db.get(account, function(err, address) {
+    var gaddress = addr + address
+    console.log(gaddress)
+    post('z_getbalance', [gaddress], function(err, data) {
+        if (err != null) {
+            console.log('Error: ' + err.message);
+            return;
+        }
+  db.get(toAccount, function(err, address) {
+    var haddress = addr + address
+    if (haddress == '' + 'undefined') {
+      reaction.message.channel.send(qaccount + ', User specified not found.')
+      return;
+    }
+    console.log(haddress)
+      if (data.result >= amountInt) {
+        if (data.result >= amountInt - threshold - txFee) {
+          console.log(data.result >= amountInt - threshold - txFee)
+          var amount = data.result - txFee;
+            console.log(amountInt)
+            var bal = amount - amountInt;
+            bal = bal.toFixed(8)
+            console.log('Transfer', amountInt, 'from', gaddress, 'to', haddress);
+            post('z_sendmany', [gaddress, [{ address: haddress, amount: amountInt }, { address: gaddress, amount: bal }]], function(err, data) {
+                if (err != null) {
+                    console.log('Error: ' + e.message);
+                    reaction.message.channel.send('ERROR, please contact Limit#1844')
+                } else {
+                    console.log(data)
+                    console.log('Sent', amountInt, 'to', haddress);
+                    reaction.message.channel.send(qaccount + ', Sent **' + amountInt + '** Koto to ``' + haddress + '``')
+                    reaction.message.channel.send('Your balance should update once the transaction gets confirmed.')
+                }
+            });
+        } else {
+            console.log('Balance', data.result, 'is below threshold');
+            reaction.message.channel.send(qaccount + 'Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
+              }
+            }
+        else {
+           console.log ('Not enough balance')
+           reaction.message.channel.send(qaccount + ', You do not have enough balance/ Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
+              }
+            });
+          })
+        })
+      }
+module.exports.c = c
+
+
+var d = function d(reaction) {
+  console.log('asd')
+  var amountInt = '10'
+
+  var qaccount = '@' + reaction.users.last().username + '#' reaction.users.last().discriminator
+
+  var amountInt = parseFloat(amountInt).toFixed(8);
+  console.log(amountInt)
+  console.log(toAccount)
+  console.log(account)
+  db.get(account, function(err, address) {
+    var gaddress = addr + address
+    console.log(gaddress)
+    post('z_getbalance', [gaddress], function(err, data) {
+        if (err != null) {
+            console.log('Error: ' + err.message);
+            return;
+        }
+  db.get(toAccount, function(err, address) {
+    var haddress = addr + address
+    if (haddress == '' + 'undefined') {
+      reaction.message.channel.send(qaccount + ', User specified not found.')
+      return;
+    }
+    console.log(haddress)
+      if (data.result >= amountInt) {
+        if (data.result >= amountInt - threshold - txFee) {
+          console.log(data.result >= amountInt - threshold - txFee)
+          var amount = data.result - txFee;
+            console.log(amountInt)
+            var bal = amount - amountInt;
+            bal = bal.toFixed(8)
+            console.log('Transfer', amountInt, 'from', gaddress, 'to', haddress);
+            post('z_sendmany', [gaddress, [{ address: haddress, amount: amountInt }, { address: gaddress, amount: bal }]], function(err, data) {
+                if (err != null) {
+                    console.log('Error: ' + e.message);
+                    reaction.message.channel.send('ERROR, please contact Limit#1844')
+                } else {
+                    console.log(data)
+                    console.log('Sent', amountInt, 'to', haddress);
+                    reaction.message.channel.send(qaccount + ', Sent **' + amountInt + '** Koto to ``' + haddress + '``')
+                    reaction.message.channel.send('Your balance should update once the transaction gets confirmed.')
+                }
+            });
+        } else {
+            console.log('Balance', data.result, 'is below threshold');
+            reaction.message.channel.send(qaccount + 'Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
+              }
+            }
+        else {
+           console.log ('Not enough balance')
+           reaction.message.channel.send(qaccount + ', You do not have enough balance/ Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
+              }
+            });
+          })
+        })
+      }
+module.exports.d = d
+
+
+var e = function e(reaction) {
+  console.log('asd')
+  var amountInt = '100'
+
+  var qaccount = '@' + reaction.users.last().username + '#' reaction.users.last().discriminator
+
+  var amountInt = parseFloat(amountInt).toFixed(8);
+  console.log(amountInt)
+  console.log(toAccount)
+  console.log(account)
+  db.get(account, function(err, address) {
+    var gaddress = addr + address
+    console.log(gaddress)
+    post('z_getbalance', [gaddress], function(err, data) {
+        if (err != null) {
+            console.log('Error: ' + err.message);
+            return;
+        }
+  db.get(toAccount, function(err, address) {
+    var haddress = addr + address
+    if (haddress == '' + 'undefined') {
+      reaction.message.channel.send(qaccount + ', User specified not found.')
+      return;
+    }
+    console.log(haddress)
+      if (data.result >= amountInt) {
+        if (data.result >= amountInt - threshold - txFee) {
+          console.log(data.result >= amountInt - threshold - txFee)
+          var amount = data.result - txFee;
+            console.log(amountInt)
+            var bal = amount - amountInt;
+            bal = bal.toFixed(8)
+            console.log('Transfer', amountInt, 'from', gaddress, 'to', haddress);
+            post('z_sendmany', [gaddress, [{ address: haddress, amount: amountInt }, { address: gaddress, amount: bal }]], function(err, data) {
+                if (err != null) {
+                    console.log('Error: ' + err.message);
+                    reaction.message.channel.send('ERROR, please contact Limit#1844')
+                } else {
+                    console.log(data)
+                    console.log('Sent', amountInt, 'to', haddress);
+                    reaction.message.channel.send(qaccount + ', Sent **' + amountInt + '** Koto to ``' + haddress + '``')
+                    reaction.message.channel.send('Your balance should update once the transaction gets confirmed.')
+                }
+            });
+        } else {
+            console.log('Balance', data.result, 'is below threshold');
+            reaction.message.channel.send(qaccount + 'Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
+              }
+            }
+        else {
+           console.log ('Not enough balance')
+           reaction.message.channel.send(qaccount + ', You do not have enough balance/ Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
+              }
+            });
+          })
+        })
+      }
+module.exports.e = e
