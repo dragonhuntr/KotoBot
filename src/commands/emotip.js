@@ -122,3 +122,62 @@ var a = function a(reaction) {
       }
 
 module.exports.a = a
+
+var b = function b(reaction) {
+  console.log('asd')
+  var amountInt = '1'
+
+  var amountInt = parseFloat(amountInt).toFixed(8);
+  console.log(amountInt)
+  console.log(toAccount)
+  console.log(account)
+
+  db.get(account, function(err, address) {
+    var gaddress = addr + address
+    console.log(gaddress)
+    post('z_getbalance', [gaddress], function(err, data) {
+        if (err != null) {
+            console.log('Error: ' + err.message);
+            return;
+        }
+  db.get(toAccount, function(err, address) {
+    var haddress = addr + address
+    if (haddress  == '' + 'undefined') {
+      reaction.message.channel.send(message.author.toString() + ', User specified not found.')
+      return;
+    }
+    console.log(haddress)
+      if (data.result >= amountInt) {
+        if (data.result >= amountInt - threshold - txFee) {
+          console.log(data.result >= amountInt - threshold - txFee)
+          var amount = data.result - txFee;
+            console.log(amountInt)
+            var bal = amount - amountInt;
+            bal = bal.toFixed(8)
+            console.log('Transfer', amountInt, 'from', gaddress, 'to', haddress);
+            post('z_sendmany', [gaddress, [{ address: haddress, amount: amountInt }, { address: gaddress, amount: bal }]], function(err, data) {
+                if (err != null) {
+                    console.log('Error: ' + e.message);
+                    reaction.message.channel.send('ERROR, please contact Limit#1844')
+                } else {
+                    console.log(data)
+                    console.log('Sent', amountInt, 'to', haddress);
+                    reaction.message.channel.send(reaction.message.author.toString() + 'Sent **' +  amountInt + '** Koto to ``' +  haddress + '``')
+                    reaction.message.channel.send('Your balance should update once the transaction gets confirmed.')
+                }
+            });
+        } else {
+            console.log('Balance', data.result, 'is below threshold');
+            reaction.message.channel.send(reaction.message.author.toString() + 'Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
+              }
+            }
+        else {
+           console.log ('Not enough balance')
+           reaction.message.channel.send(reaction.message.author.toString() + ', You do not have enough balance/ Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
+              }
+            });
+          })
+        })
+      }
+
+module.exports.b = b
