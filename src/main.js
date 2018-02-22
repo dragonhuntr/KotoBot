@@ -4,14 +4,50 @@ const Zcash = require("zcash")
 const settings = require('./settings')
 const Commands = require('./commands')
 
+var emotip = require('./commands/emotip')
+
 // Init the Discord client
 const client = new Discord.Client()
 
+const giphyApiKey = settings.GIPHY_KEY
+
 client.on('ready', () => {
+  client.user.setPresence({ status: 'online', game: { name: 'Do -koto help!' } });
   console.log('I am ready!')
 })
 
+client.on('messageReactionAdd', (reaction, user, message) => {
+  console.log(reaction.emoji.id)
+  if(reaction.emoji.id === '415886353063215114') {
+    toAccount = reaction.message.author.username + reaction.message.author.discriminator
+    account =  reaction.users.last().username + reaction.users.last().discriminator
+
+    emotip.a(reaction);
+  } else if(reaction.emoji.id === '415886353121673216') {
+      toAccount = reaction.message.author.username + reaction.message.author.discriminator
+      account =  reaction.users.last().username + reaction.users.last().discriminator
+
+    emotip.b(reaction);
+  } else if(reaction.emoji.id === '415886352836460547') {
+      toAccount = reaction.message.author.username + reaction.message.author.discriminator
+      account =  reaction.users.last().username + reaction.users.last().discriminator
+
+    emotip.c(reaction);
+  } else if(reaction.emoji.id === '415886352861757441') {
+      toAccount = reaction.message.author.username + reaction.message.author.discriminator
+      account =  reaction.users.last().username + reaction.users.last().discriminator
+
+    emotip.d(reaction);
+  } else if(reaction.emoji.id === '415886353121935360') {
+      toAccount = reaction.message.author.username + reaction.message.author.discriminator
+      account =  reaction.users.last().username + reaction.users.last().discriminator
+
+    emotip.e(reaction);
+  }
+})
+
 client.on('message', message => {
+
   // If message has been emitted by a bot do nothing
   if (message.author.bot) return
 
@@ -28,6 +64,9 @@ client.on('message', message => {
         break
       case 'address':
         Commands.address(message, Zcash)
+        break
+      case 'tip':
+        Commands.tip(message, Zcash, args[2], args[3])
         break
       case 'withdraw':
         Commands.withdraw(message, Zcash, args[2], args[3])
