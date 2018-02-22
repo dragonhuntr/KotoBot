@@ -68,7 +68,7 @@ var a = function a(reaction) {
   console.log('asd')
   var amountInt = '0.1'
 
-  var qaccount = '@' + reaction.users.last().username + '#' reaction.users.last().discriminator
+  var qaccount = '@' + reaction.users.last().username + '#' + reaction.users.last().discriminator
 
   var amountInt = parseFloat(amountInt).toFixed(8);
   console.log(amountInt)
@@ -129,7 +129,7 @@ var b = function b(reaction) {
   console.log('asd')
   var amountInt = '1'
 
-  var qaccount = '@' + reaction.users.last().username + '#' reaction.users.last().discriminator
+  var qaccount = '@' + reaction.users.last().username + '#' + reaction.users.last().discriminator
 
   var amountInt = parseFloat(amountInt).toFixed(8);
   console.log(amountInt)
@@ -189,7 +189,7 @@ var c = function c(reaction) {
   console.log('asd')
   var amountInt = '5'
 
-  var qaccount = '@' + reaction.users.last().username + '#' reaction.users.last().discriminator
+  var qaccount = '@' + reaction.users.last().username + '#' + reaction.users.last().discriminator
 
   var amountInt = parseFloat(amountInt).toFixed(8);
   console.log(amountInt)
@@ -249,7 +249,7 @@ var d = function d(reaction) {
   console.log('asd')
   var amountInt = '10'
 
-  var qaccount = '@' + reaction.users.last().username + '#' reaction.users.last().discriminator
+  var qaccount = '@' + reaction.users.last().username + '#' + reaction.users.last().discriminator
 
   var amountInt = parseFloat(amountInt).toFixed(8);
   console.log(amountInt)
@@ -309,7 +309,7 @@ var e = function e(reaction) {
   console.log('asd')
   var amountInt = '100'
 
-  var qaccount = '@' + reaction.users.last().username + '#' reaction.users.last().discriminator
+  var qaccount = '@' + reaction.users.last().username + '#' + reaction.users.last().discriminator
 
   var amountInt = parseFloat(amountInt).toFixed(8);
   console.log(amountInt)
