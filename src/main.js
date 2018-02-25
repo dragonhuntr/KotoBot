@@ -22,27 +22,27 @@ client.on('messageReactionAdd', (reaction, user, message) => {
     toAccount = reaction.message.author.username + reaction.message.author.discriminator
     account =  reaction.users.last().username + reaction.users.last().discriminator
 
-    emotip.a(reaction);
+    emotip(reaction, 0.1);
   } else if(reaction.emoji.id === '415886353121673216') {
       toAccount = reaction.message.author.username + reaction.message.author.discriminator
       account =  reaction.users.last().username + reaction.users.last().discriminator
 
-    emotip.b(reaction);
+    emotip(reaction, 1);
   } else if(reaction.emoji.id === '415886352836460547') {
       toAccount = reaction.message.author.username + reaction.message.author.discriminator
       account =  reaction.users.last().username + reaction.users.last().discriminator
 
-    emotip.c(reaction);
+    emotip(reaction, 5);
   } else if(reaction.emoji.id === '415886352861757441') {
       toAccount = reaction.message.author.username + reaction.message.author.discriminator
       account =  reaction.users.last().username + reaction.users.last().discriminator
 
-    emotip.d(reaction);
+    emotip(reaction, 10);
   } else if(reaction.emoji.id === '415886353121935360') {
       toAccount = reaction.message.author.username + reaction.message.author.discriminator
       account =  reaction.users.last().username + reaction.users.last().discriminator
 
-    emotip.e(reaction);
+    emotip(reaction, 100);
   }
 })
 
