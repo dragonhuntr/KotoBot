@@ -63,10 +63,11 @@ function post(method, params, callback) {
     req.end('\n');
 };
 
-module.exports = function(reaction, amount) {
+function emotip(reaction, amount) {
+    
   var amountInt = amount;
 
-  var qaccount = '@' + reaction.users.last().username + '#' + reaction.users.last().discriminator
+  var qaccount = reaction.users.last().toString()
 
   var amountInt = parseFloat(amountInt).toFixed(8);
   console.log(amountInt)
@@ -85,6 +86,9 @@ module.exports = function(reaction, amount) {
     if (haddress == '' + 'undefined') {
       reaction.message.channel.send(qaccount + ', User specified not found.')
       return;
+    }
+    if (haddress == gaddress) {
+      reaction.message.channel.send(qaccount + ', You cannot tip yourself!')
     }
     console.log(haddress)
       if (data.result >= amountInt) {
@@ -113,9 +117,10 @@ module.exports = function(reaction, amount) {
             }
         else {
            console.log ('Not enough balance')
-           reaction.message.channel.send(qaccount + ', You do not have enough balance/ Your tipping amount is below the threshold of **0.1** Koto. Please raise the amount.');
+           reaction.message.channel.send(qaccount + ', You do not have enough balance');
               }
             });
           })
         })
 }
+module.exports = emotip
