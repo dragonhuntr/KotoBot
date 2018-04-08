@@ -30,8 +30,8 @@ var Zcash = require("zcash");
 
 const http = require('http');
 
-const rpcLogin = 'rpclogin';
-const rpcPassword = 'pw';
+const rpcLogin = 'rpcuser';
+const rpcPassword = 'rpcpass';
 const rpcHost = '127.0.0.1';
 const rpcPort = 8432;
 
@@ -111,11 +111,17 @@ function withdraw (client, message, Zcash, amount, toAddress) {
             console.log(data.result)
             var amount = data.result - txFee;
             console.log(amount)
-            var bal = amountInt - amount;
+            if (amountInt >= amount) {
+              var bal = amountInt - amount;
+              }
+            else {
+              var bal = amount - amountInt;
+                     }
             bal = parseFloat(bal).toFixed(8);
             console.log(bal)
             console.log('Transfer', amountInt, 'from', gaddress, 'to', toAddress);
             post('z_sendmany', [gaddress, [{ address: toAddress, amount: amountInt }, { address: gaddress, amount: bal }]], function(err, data) {
+             if (data.error !== null && data.error !== '') {
                 if (data.error.code == '-8' && data.error.code) {
                   message.reply('Invalid transaction!')
                   return
@@ -125,6 +131,7 @@ function withdraw (client, message, Zcash, amount, toAddress) {
                   console.log(data.error)
                   return
   }
+}
                 if (err == null) {
                     console.log('Sent', amountInt, 'to', toAddress);
                     if (message.channel.id == hello || message.channel.id == generaljp  || message.channel.id == generaleng  || message.channel.id == support  || message.channel.id == pool) {
