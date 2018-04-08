@@ -8,10 +8,10 @@ var pool = '400247864510513153'
 const request = require('request')
 const { OOPS_TEXT } = require('./messages')
 
-const RATE_URL = 'https://api.jambtc.com/api/market/ticker?mark=btc_koto'
+const RATE_URL = 'https://exvo.io/api/v2/tickers/kotobtc.json'
 
 /**
- * Give the rate of one dogecoin in euro.
+ * Give the rate of one Koto in BTC.
  * @return rate
  **/
 function price(client, message) {
@@ -22,7 +22,7 @@ function price(client, message) {
         return
       }
       var obj = JSON.parse(body);
-      var aprice = obj.data;
+      var aprice = obj.ticker;
       var high = aprice.high
       var low = aprice.low
       var buy = aprice.buy;
@@ -31,8 +31,8 @@ function price(client, message) {
 const embed = {
   "color": 120866,
   "footer": {
-    "icon_url": "https://cdn.discordapp.com/avatars/396346237894393858/4ba56b9b8072ab7913914e1551c14a4b.png?size=128",
-    "text": "Price provided by JamBTC.com"
+    "icon_url": "https://exvo.io/logo64.png",
+    "text": "Price provided by Exvo.io"
   },
   "fields": [
     {
