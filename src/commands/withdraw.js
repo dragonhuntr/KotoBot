@@ -1,3 +1,10 @@
+var botch = '418393980213002252'
+var hello = '400200783997698049'
+var generaljp = '400107631810969611'
+var generaleng = '400108763454898187'
+var support = '407085776661250058'
+var pool = '400247864510513153'
+
 const { OOPS_TEXT } = require('../messages')
 
 const WITHDRAW_TEXT = 'Successful withdrawal.'
@@ -23,9 +30,9 @@ var Zcash = require("zcash");
 
 const http = require('http');
 
-const rpcLogin = ‘insert-rpc-username-here’;
-const rpcPassword = ‘insert-rpc-password-here’;
-const rpcHost = ‘insert-rpc-ip-here’;
+const rpcLogin = 'rpclogin';
+const rpcPassword = 'pw';
+const rpcHost = '127.0.0.1';
 const rpcPort = 8432;
 
 const txFee = 0.0001;
@@ -59,11 +66,11 @@ function post(method, params, callback) {
     req.write(body);
     req.end('\n');
 };
- 
+
 // Execute RPC z_sendmany
-function withdraw (message, Zcash, amount, toAddress) {
-  var amountInt = parseInt(amount)
-  if (!amountInt) {
+function withdraw (client, message, Zcash, amount, toAddress) {
+  var amountInt = parseFloat(amount).toFixed(8);
+  if (!amount) {
     message.reply(PROPER_AMOUNT_TEXT)
     return
   }
@@ -85,31 +92,65 @@ function withdraw (message, Zcash, amount, toAddress) {
     var gaddress = addr + address
     console.log(gaddress)
     post('z_getbalance', [gaddress], function(err, data) {
+      console.log(err)
         if (err != null) {
-            console.log('Error: ' + err.message);
+            console.log('Error: ' + err);
+            message.channel.send('' + err)
             return;
         }
-        if (data.result >= (threshold - txFee)) {
+        if (toAddress === gaddress) {
+          if (message.channel.id == hello || message.channel.id == generaljp  || message.channel.id == generaleng  || message.channel.id == support  || message.channel.id == pool) {
+            client.channels.get('418393980213002252').send(message.author.toString() + ', You cannot withdraw to the same address!')
+           }
+          else {
+            message.channel.send(message.author.toString() + ', You cannot withdraw to the same address!')
+          }
+          return;
+}
+      if (data.result >= (threshold - txFee)) {
+            console.log(data.result)
             var amount = data.result - txFee;
-            var bal = amount - amountInt;
+            console.log(amount)
+            var bal = amountInt - amount;
+            bal = parseFloat(bal).toFixed(8);
+            console.log(bal)
             console.log('Transfer', amountInt, 'from', gaddress, 'to', toAddress);
             post('z_sendmany', [gaddress, [{ address: toAddress, amount: amountInt }, { address: gaddress, amount: bal }]], function(err, data) {
-                if (err != null) {
-                    console.log('Error: ' + e.message);
-                    message.channel.send(message.author.toString() + ' ERROR, please contact Limit#1844')
-                } else {
-                    console.log(data)
+                if (data.error.code == '-8' && data.error.code) {
+                  message.reply('Invalid transaction!')
+                  return
+}
+                else if (data.error.code == '-3' && data.error.code) {
+                  message.reply('transaction error please contact limit')
+                  console.log(data.error)
+                  return
+  }
+                if (err == null) {
                     console.log('Sent', amountInt, 'to', toAddress);
-                    message.channel.send(message.author.toString() + ', Sent **' +  amountInt + '** Koto to ``' +  toAddress + '``')
-                    message.channel.send('Your balance should update once the transaction gets confirmed.')
+                    if (message.channel.id == hello || message.channel.id == generaljp  || message.channel.id == generaleng  || message.channel.id == support  || message.channel.id == pool) {
+                      client.channels.get('418393980213002252').send(message.author.toString() + ', Sent **' +  amountInt + '** Koto to ``' +  toAddress + '``')
+                      client.channels.get('418393980213002252').send('Your balance should update once the transaction gets confirmed.')
+                    }
+                    else {
+                      message.channel.send(message.author.toString() + ', Sent **' +  amountInt + '** Koto to ``' +  toAddress + '``')
+                      message.channel.send('Your balance should update once the transaction gets confirmed.')
+                   }
+                } else {
+                    console.log('Error' + err);
+        client.channels.get('418393980213002252').send(message.author.toString() + ' ERROR, please contact Limit#1844 ' + err)
                 }
             });
         } else {
             console.log('Balance', data.result, 'is below threshold');
-            message.channel.send('You do not have enough balance');
+            if (message.channel.id == hello || message.channel.id == generaljp  || message.channel.id == generaleng  || message.channel.id == support  || message.channel.id == pool) {
+              client.channels.get('418393980213002252').send(message.author.toString() + ', You do not have enough balance');
+              }
+            else {
+             message.channel.send(message.author.toString() + ', You do not have enough balance');
+             }
         }
     });
   })
 }
- 
+
 module.exports = withdraw
