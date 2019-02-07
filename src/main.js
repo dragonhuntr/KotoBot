@@ -1,3 +1,5 @@
+//written by limit
+
 const Discord = require('discord.js')
 const Zcash = require("zcash")
 
